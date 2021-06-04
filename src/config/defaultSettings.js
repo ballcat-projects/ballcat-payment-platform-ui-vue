@@ -14,7 +14,7 @@
 export const appDefaultSetting = {
   primaryColor: '#1890FF', // primary color of ant design
   navTheme: 'dark', // theme for nav menu
-  layout: 'side', // nav menu position: side or top or mix
+  layout: 'top', // nav menu position: side or top or mix
   contentWidth: 'Fixed', // layout of content: Fluid or Fixed, Does not work in side modes
   fixedHeader: false, // sticky header
   fixSiderbar: true, // sticky siderbar

@@ -1,22 +1,22 @@
 <template>
   <div class="ballcat-global-header-tool-right">
 
-    <a href="http://www.ballcat.cn" target="_blank" style="color: inherit;">
-      <span class="ballcat-global-header-tool-action">
-        <a-icon type="question-circle-o" />
-      </span>
-    </a>
+    <!--    <a href="http://www.ballcat.cn" target="_blank" style="color: inherit;">-->
+    <!--      <span class="ballcat-global-header-tool-action">-->
+    <!--        <a-icon type="question-circle-o" />-->
+    <!--      </span>-->
+    <!--    </a>-->
 
-    <screenfull id="screenfull" class="ballcat-global-header-tool-action" />
+    <screenfull id="screenfull" class="ballcat-global-header-tool-action"/>
 
-    <notice-icon class="ballcat-global-header-tool-action" />
+    <!--    <notice-icon class="ballcat-global-header-tool-action" />-->
 
-    <user-account-dropdown class="ballcat-global-header-tool-action" />
+    <user-account-dropdown class="ballcat-global-header-tool-action"/>
 
     <!--    <lang-select class="ballcat-global-header-tool-action" />-->
     <span class="ballcat-global-header-tool-action" @click="showSettingDrawer">
-      <a-icon type="more" style="font-size: 16px; font-weight: bolder" />
-      <setting-drawer ref="settingDrawer" :show-handle="false" />
+      <a-icon type="more" style="font-size: 16px; font-weight: bolder"/>
+      <setting-drawer ref="settingDrawer" :show-handle="false"/>
     </span>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
     UserAccountDropdown
   },
   methods: {
-    showSettingDrawer(){
+    showSettingDrawer() {
       this.$refs.settingDrawer.showDrawer();
     }
   }

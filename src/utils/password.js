@@ -1,6 +1,6 @@
 import * as CryptoJS from 'crypto-js'
 
-const securityKey = '==BallCat-Auth=='
+const securityKey = "live:lingting:25"
 
 export const passEncrypt = (pass) => {
   // 密码加密
@@ -18,9 +18,9 @@ export const passEncrypt = (pass) => {
  * @word 要加密的内容
  * @keyWord String  服务器随机返回的关键字
  *  */
-export function captchaEncrypt (word, keyWord = 'XwKsGlMcdPMEhR1B') {
+export function captchaEncrypt(word, keyWord = 'XwKsGlMcdPMEhR1B') {
   const key = CryptoJS.enc.Utf8.parse(keyWord)
   const srcs = CryptoJS.enc.Utf8.parse(word)
-  const encrypted = CryptoJS.AES.encrypt(srcs, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 })
+  const encrypted = CryptoJS.AES.encrypt(srcs, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7})
   return encrypted.toString()
 }

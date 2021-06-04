@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
 const projectConfig = require('./src/config/projectConfig')
-const serverAddress = 'http://ballcat-admin:8080'
+const serverAddress = 'http://192.168.1.237:23301'
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -129,7 +129,7 @@ const vueConfig = {
 
   devServer: {
     // development server port 8000
-    port: 8000,
+    port: 23310,
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
       '^/api': {
