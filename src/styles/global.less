@@ -1,0 +1,262 @@
+@import '~@/styles/index.less';
+
+/*缩小首页布 局顶部的高度*/
+@ballcat-header-height: 48px;
+
+// 色弱模式
+#app.colorWeak {
+  filter: invert(80%);
+}
+
+body {
+  &.userLayout {
+    overflow: auto;
+  }
+}
+
+.layout.ant-layout {
+  height: auto;
+  overflow-x: hidden;
+
+  &.mobile,
+  &.tablet {
+    .ant-layout-content {
+      .content {
+        margin: 24px 0 0;
+      }
+    }
+
+    .top {
+      /* 必须为 top  才能启用流式布局 */
+      &.content-width-Fluid {
+        .header-index-wide {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+
+  &.mobile {
+    .side {
+      .ant-header-fixedHeader {
+        &.ant-header-side-opened,
+        &.ant-header-side-closed {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  &.ant-layout-has-sider {
+    flex-direction: row;
+  }
+
+  .top {
+    .ant-header-fixedHeader {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 9;
+      width: 100%;
+      transition: width 0.2s;
+
+      &.ant-header-side-opened {
+        width: 100%;
+      }
+
+      &.ant-header-side-closed {
+        width: 100%;
+      }
+    }
+    /* 必须为 top  才能启用流式布局 */
+    &.content-width-Fluid {
+      .header-index-wide {
+        max-width: unset;
+      }
+      .page-header-index-wide {
+        max-width: unset;
+      }
+    }
+  }
+
+  .side {
+    .ant-header-fixedHeader {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 19;
+      width: 100%;
+      transition: width 0.2s;
+
+      &.ant-header-side-opened {
+        width: calc(100% - 208px);
+      }
+
+      &.ant-header-side-closed {
+        width: calc(100% - 48px);
+      }
+    }
+  }
+  .mix {
+    .ant-header-fixedHeader {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 19;
+      width: 100%;
+      transition: width 0.2s;
+
+      &.ant-header-side-opened {
+        width: calc(100% - 208px);
+      }
+
+      &.ant-header-side-closed {
+        width: calc(100% - 48px);
+      }
+    }
+  }
+
+  .header {
+    height: @ballcat-header-height;
+    padding-left: 12px;
+    background: #fff;
+    box-shadow: 1px 1px 0 #f0f0f0;
+    // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    display: flex;
+    align-items: center;
+  }
+
+  .header,
+  .top-nav-header-index {
+    &.dark {
+      .user-wrapper {
+        .action {
+          color: rgba(255, 255, 255, 0.85);
+          a {
+            color: rgba(255, 255, 255, 0.85);
+          }
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.16);
+          }
+        }
+      }
+    }
+  }
+
+  &.mobile,
+  &.tablet {
+    .top-nav-header-index {
+      .header-index-wide {
+        .header-index-left {
+          .trigger {
+            color: rgba(255, 255, 255, 0.85);
+            padding: 0 12px;
+          }
+
+          .logo.top-nav-header {
+            flex: 0 0 56px;
+            text-align: center;
+            line-height: 58px;
+            h1 {
+              display: none;
+            }
+          }
+        }
+      }
+
+      &.light {
+        .header-index-wide {
+          .header-index-left {
+            .trigger {
+              color: rgba(0, 0, 0, 0.65);
+            }
+          }
+        }
+        //
+      }
+    }
+  }
+
+  &.tablet {
+    // overflow: hidden; text-overflow:ellipsis; white-space: nowrap;
+    .top-nav-header-index {
+      .header-index-wide {
+        .header-index-left {
+          .logo > a {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+        .ant-menu.ant-menu-horizontal {
+          flex: 1 1 auto;
+          white-space: normal;
+        }
+      }
+    }
+  }
+
+  .top-nav-header-index {
+    box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+    position: relative;
+    transition: background 0.3s, width 0.2s;
+
+    .header-index-wide {
+      padding-left: 16px;
+      display: flex;
+      height: @ballcat-header-height;
+
+      .header-index-left {
+        min-width: 192px;
+        display: flex;
+      }
+    }
+
+    &.light {
+      background-color: #fff;
+    }
+    &.dark {
+      background-color: #001529;
+    }
+  }
+
+  // 内容区
+  .layout-content {
+    margin: 24px 24px 0;
+    height: 100%;
+    padding: 0 12px 0 0;
+  }
+
+  // footer
+  .ant-layout-footer {
+    padding: 0;
+  }
+}
+
+.top {
+  .page-header-index-wide {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+// 数据列表 样式
+.table-alert {
+  margin-bottom: 16px;
+}
+
+.content {
+  .table-operator {
+    margin-bottom: 18px;
+
+    button {
+      margin-right: 8px;
+    }
+  }
+}
+
+// 表格滚动条自动，防止宽度足够时也展示滚动条
+.ant-table-body {
+  overflow-x: auto !important;
+}

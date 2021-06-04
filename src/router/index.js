@@ -1,0 +1,29 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+import { constantRouters } from '@/router/constantRouter'
+
+// hack router push callback
+const originalPush = Router.prototype.push
+Router.prototype.push = function push (location, onResolve, onReject) {
+  if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+  return originalPush.call(this, location).catch(err => err)
+}
+
+Vue.use(Router)
+
+// @see https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+const createRouter = () => new Router({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouters
+})
+
+const router = createRouter()
+
+export function resetRouter () {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher // the relevant part
+}
+
+export default router
