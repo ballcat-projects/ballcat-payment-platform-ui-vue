@@ -29,11 +29,9 @@
 <script>
 import {history} from '@/api/platform/project'
 import {TablePageMixin} from '@/mixins'
-import Model from './Model'
 
 export default {
   name: 'ProjectList',
-  components: {Model},
   mixins: [TablePageMixin],
   data() {
     return {
