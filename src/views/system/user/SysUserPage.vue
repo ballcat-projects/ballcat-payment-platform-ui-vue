@@ -142,7 +142,7 @@
                 <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
               </template>
               <template #gender-slot="text">
-                <dict-text dict-code="gender" :value="text" />
+                <dict-slot dict-code="gender" :value="text" />
               </template>
               <template #avatar-slot="text, record">
                 <a-avatar

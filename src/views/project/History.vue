@@ -16,7 +16,7 @@
             @change="handleTableChange"
           >
             <template #disabled-slot="text">
-              <dict-text dict-code="tf" :value="text"/>
+              <dict-slot dict-code="tf" :value="text"/>
             </template>
           </a-table>
         </div>

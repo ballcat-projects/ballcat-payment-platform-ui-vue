@@ -79,7 +79,7 @@
             <dict-slot dict-code="operation_type" :value="text" />
           </template>
           <template #status-slot="text">
-            <dict-text dict-code="log_status" :value="text" />
+            <dict-slot dict-code="log_status" :value="text" />
           </template>
           <template #expandedRowRender="record">
             <p>params:</p>

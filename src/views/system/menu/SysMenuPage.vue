@@ -76,7 +76,7 @@
             {{ record.title }}
           </template>
           <template #hidden-slot="text">
-            <dict-text dict-code="tf" :value="text? 0: 1" />
+            <dict-slot dict-code="tf" :value="text? 0: 1" />
           </template>
           <template #action-slot="text, record">
             <a v-has="'system:menu:add'" @click="handleAdd(record)">添加</a>

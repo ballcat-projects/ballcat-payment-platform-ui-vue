@@ -71,7 +71,7 @@
             </template>
 
             <template #recipient-slot="type">
-              <dict-text dict-code="recipient_filter_type" :value="type" />
+              <dict-slot dict-code="recipient_filter_type" :value="type" />
             </template>
 
             <template #receive-mode-slot="modes">

@@ -69,7 +69,7 @@
           @change="handleTableChange"
         >
           <template #disabled-slot="text">
-            <dict-text dict-code="tf" :value="text"/>
+            <dict-slot dict-code="tf" :value="text"/>
           </template>
           <template #action-slot="text, record">
             <a v-has="'project:edit'" @click="reset(record)">重置API</a>
