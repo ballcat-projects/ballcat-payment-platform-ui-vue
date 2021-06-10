@@ -110,7 +110,7 @@ export default {
       this.submitLoading = false
     },
     copy(va) {
-      this.vaList.push({chain: va.chain})
+      this.vaList.push({chain: va.chain, disabled: va.disabled})
     }
   }
 }

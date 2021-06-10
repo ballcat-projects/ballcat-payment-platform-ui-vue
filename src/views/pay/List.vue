@@ -141,11 +141,6 @@ export default {
           ellipsis: true
         },
         {
-          title: '第三方交易号',
-          dataIndex: 'thirdPartTradeNo',
-          ellipsis: true
-        },
-        {
           title: '支付状态',
           dataIndex: 'status',
           width: 100,
@@ -198,6 +193,11 @@ export default {
           dataIndex: 'notifyStatus',
           width: 100,
           scopedSlots: {customRender: 'notify-status-slot'}
+        },
+        {
+          title: '完成时间',
+          dataIndex: 'completeTime',
+          width: 150
         },
         {
           title: '创建时间',
