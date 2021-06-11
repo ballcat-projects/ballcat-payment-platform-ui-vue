@@ -17,7 +17,7 @@
             type="error"
             show-icon
             style="margin-bottom: 24px;"
-            message="账户或密码错误（admin/a123456 )"
+            message="账户或密码错误"
           />
           <a-form-item>
             <a-input
@@ -27,7 +27,7 @@
               ]"
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="账户"
             >
               <template #prefix>
                 <a-icon type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -44,7 +44,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: a123456"
+              placeholder="密码"
             >
               <template #prefix>
                 <a-icon type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
