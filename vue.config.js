@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
 const projectConfig = require('./src/config/projectConfig')
-const serverAddress = 'http://192.168.1.237:23301'
+const serverAddress = 'http://mix-web:23301'
 
 function resolve(dir) {
   return path.join(__dirname, dir)
