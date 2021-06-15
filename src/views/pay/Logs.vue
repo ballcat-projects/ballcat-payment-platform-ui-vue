@@ -68,18 +68,13 @@ export default {
           ellipsis: true
         },
         {
-          title: '通知时间',
-          dataIndex: 'time',
-          width: 150
-        },
-        {
           title: '通知状态',
-          dataIndex: 'notifyStatus',
+          dataIndex: 'status',
           width: 100,
           scopedSlots: {customRender: 'notify-status-slot'}
         },
         {
-          title: '创建时间',
+          title: '通知时间',
           dataIndex: 'createTime',
           width: 150
         }
