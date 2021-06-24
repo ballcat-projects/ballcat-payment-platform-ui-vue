@@ -8,6 +8,11 @@
     @cancel="close"
   >
     <a-form :form="form">
+      <a-button type="dashed" style="width: 50%; margin-bottom: 10px;margin-top: -10px;" @click="createVa">
+        <a-icon type="plus"/>
+        新增
+      </a-button>
+
       <div v-for="(va, index) of vaList">
         <a-input-group v-if="!res" compact style="margin-bottom: 5px">
           <a-input style="width: 48px">
@@ -15,7 +20,8 @@
               禁用
             </div>
           </a-input>
-          <dict-select dict-code="tf" placeholder="是否禁用" v-model="va.disabled" style="width: 60px;margin-top: -1px;"/>
+          <dict-select dict-code="tf" placeholder="是否禁用" v-model="va.disabled" style="width: 60px;margin-top: -1px;"
+                       :allowClear="false"/>
           <a-input style="width: 38px">
             <div slot="addonBefore">
               链
@@ -25,12 +31,13 @@
             placeholder="请选择链"
             dict-code="chain"
             v-model="va.chain"
+            :allowClear="false"
             style="width: 100px;margin-top: -1px;"
           />
           <a-input placeholder="请输入地址" v-model="va.address" style="width: calc(100% - 266px)">
             <div slot="addonAfter">
-              <a-icon type="copy" @click="copy(va)"/>
-              <a-divider type="vertical"/>
+              <!--              <a-icon type="copy" @click="copy(va)"/>-->
+              <!--              <a-divider type="vertical"/>-->
               <a-icon style="color: red" type="close" @click="vaList.splice(index ,1)"/>
             </div>
             <div slot="addonBefore">
@@ -87,7 +94,7 @@ export default {
       reqFunctions: {
         create: addObj,
       },
-      vaList: [{disabled: 1}],
+      vaList: [{disabled: 0}],
       res: false,
       loading: false
     }
@@ -119,12 +126,17 @@ export default {
       this.visible = false
       this.submitLoading = false
       if (this.res) {
-        this.vaList = [{disabled: 1}];
+        this.vaList = [{disabled: 0}];
         this.res = false;
       }
     },
-    copy(va) {
-      this.vaList.push({chain: va.chain, disabled: va.disabled})
+    createVa() {
+      if (this.vaList.length > 0) {
+        let va = this.vaList[this.vaList.length - 1]
+        this.vaList.push({chain: va.chain, disabled: 0})
+      } else {
+        this.vaList.push({disabled: 0})
+      }
     }
   }
 }
