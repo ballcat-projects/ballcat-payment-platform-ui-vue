@@ -3,9 +3,9 @@
     :title="res?'新增结果':title"
     :visible="visible"
     :body-style="{paddingBottom: '8px'}"
-    :confirm-loading="submitLoading"
+    :confirm-loading="loading"
     :width="res? '800px': '800px'"
-    @cancel="handleClose"
+    @cancel="close"
   >
     <a-form :form="form">
       <div v-for="(va, index) of vaList">
@@ -58,9 +58,12 @@
 
     <template slot="footer">
       <div>
-        <button type="button" class="ant-btn" @click="handleClose"><span>关闭</span></button>
-        <button v-if="!res" type="button" class="ant-btn ant-btn-primary" @click="create"><span>确定</span></button>
-        <button type="button" class="ant-btn ant-btn-danger" @click="vaList = [{disabled:1}];res=false;"><span>重置</span></button>
+        <a-button type="button" class="ant-btn" @click="close"><span>关闭</span></a-button>
+        <a-button v-if="!res" type="button" class="ant-btn ant-btn-primary" @click="create" :loading="loading">
+          <span>确定</span></a-button>
+        <a-button type="button" class="ant-btn ant-btn-danger" @click="vaList = [{disabled:1}];res=false;">
+          <span>重置</span>
+        </a-button>
       </div>
     </template>
   </a-modal>
@@ -84,17 +87,18 @@ export default {
       reqFunctions: {
         create: addObj,
       },
-      vaList: [{disabled:1}],
-      res: false
+      vaList: [{disabled: 1}],
+      res: false,
+      loading: false
     }
   },
   methods: {
     create(e) {
-      this.submitLoading = true
+      this.loading = true
       for (let va of this.vaList) {
         if (!va.chain || !va.address) {
           this.$message.warn("部分信息未填写完整, 请检查!")
-          this.submitLoading = false
+          this.loading = false
           return
         }
       }
@@ -105,9 +109,19 @@ export default {
           this.res = true
           this.$emit('reload-page-table', false)
         }
-      })
 
+        this.loading = false
+      }).catch(res => {
+        this.loading = false
+      })
+    },
+    close() {
+      this.visible = false
       this.submitLoading = false
+      if (this.res) {
+        this.vaList = [{disabled: 1}];
+        this.res = false;
+      }
     },
     copy(va) {
       this.vaList.push({chain: va.chain, disabled: va.disabled})
