@@ -96,7 +96,7 @@ import Model from './Model'
 import History from './History'
 
 export default {
-  name: 'ProjectList',
+  name: 'List',
   components: {Model,History},
   mixins: [TablePageMixin],
   data() {

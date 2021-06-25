@@ -95,7 +95,7 @@ import {TablePageMixin} from '@/mixins'
 import Model from './Model'
 
 export default {
-  name: 'VirtualAddressList',
+  name: 'List',
   components: {Model},
   mixins: [TablePageMixin],
   data() {

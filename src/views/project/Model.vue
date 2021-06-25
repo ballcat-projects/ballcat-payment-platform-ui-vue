@@ -33,7 +33,7 @@ import {PopUpFormMixin} from '@/mixins'
 import {addObj} from '@/api/platform/project'
 
 export default {
-  name: "ProjectModel",
+  name: "Model",
 
   mixins: [PopUpFormMixin],
   data() {

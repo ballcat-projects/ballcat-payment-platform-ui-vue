@@ -30,7 +30,7 @@ import {logs} from '@/api/platform/pay'
 import {TablePageMixin} from '@/mixins'
 
 export default {
-  name: 'ProjectList',
+  name: 'Logs',
   mixins: [TablePageMixin],
   data() {
     return {

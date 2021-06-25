@@ -150,7 +150,7 @@ import Logs from './Logs'
 import {littleCamelToUnderline} from "@/utils/strUtil";
 
 export default {
-  name: 'ProjectList',
+  name: 'List',
   components: {Logs},
   mixins: [TablePageMixin],
   data() {

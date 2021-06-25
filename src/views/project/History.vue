@@ -31,7 +31,7 @@ import {history} from '@/api/platform/project'
 import {TablePageMixin} from '@/mixins'
 
 export default {
-  name: 'ProjectList',
+  name: 'History',
   mixins: [TablePageMixin],
   data() {
     return {

@@ -81,7 +81,7 @@ import {PopUpFormMixin} from '@/mixins'
 import {addObj} from '@/api/platform/virtualAddress'
 
 export default {
-  name: "VirtualAddressModel",
+  name: "Model",
 
   mixins: [PopUpFormMixin],
   data() {
