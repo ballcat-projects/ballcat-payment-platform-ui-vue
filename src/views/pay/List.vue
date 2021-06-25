@@ -26,22 +26,22 @@
           </a-col>
           <a-col :xl="6" :md="12" :sm="24">
             <a-form-item label="支付状态">
-              <dict-select dict-code="pay_status" placeholder="支付状态" v-model="queryParam.disabled"/>
+              <dict-select dict-code="pay_status" placeholder="支付状态" v-model="queryParam.status"/>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :md="12" :sm="24">
             <a-form-item label="支付货币">
-              <dict-select dict-code="currency" placeholder="支付货币" v-model="queryParam.disabled"/>
+              <dict-select dict-code="currency" placeholder="支付货币" v-model="queryParam.currency"/>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :md="12" :sm="24">
             <a-form-item label="支付模式">
-              <dict-select dict-code="pay_mode" placeholder="支付模式" v-model="queryParam.disabled"/>
+              <dict-select dict-code="pay_mode" placeholder="支付模式" v-model="queryParam.mode"/>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :md="12" :sm="24">
             <a-form-item label="通知状态">
-              <dict-select dict-code="notify_status" placeholder="通知状态" v-model="queryParam.disabled"/>
+              <dict-select dict-code="notify_status" placeholder="通知状态" v-model="queryParam.notifyStatus"/>
             </a-form-item>
           </a-col>
 
@@ -65,17 +65,22 @@
     </div>
 
     <a-card :bordered="false" :body-style="{paddingTop: '0'}">
-
+      <div class="ant-pro-table-toolbar">
+        <div class="ant-pro-table-toolbar-title"></div>
+        <div class="ant-pro-table-toolbar-option"></div>
+      </div>
       <!--数据表格区域-->
       <div class="ant-pro-table-wrapper">
         <a-table
           ref="table"
           size="middle"
+          bordered
           :row-key="rowKey"
           :columns="columns"
           :data-source="dataSource"
           :pagination="pagination"
           :loading="loading"
+          :scroll="{x:true}"
           @change="handleTableChange"
         >
           <template #status-slot="text">
@@ -97,7 +102,38 @@
             <dict-slot dict-code="notify_status" :value="text"/>
           </template>
           <template #action-slot="text, record">
-            <a v-has="'project:read'" @click="$refs.log.show(record)">通知记录</a>
+            <a-dropdown placement="bottomCenter">
+              <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+                展开
+                <a-icon type="down"/>
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item v-has="'project:read'">
+                  <a @click="$refs.log.show(record)">通知记录</a>
+                </a-menu-item>
+                <a-menu-item v-has="'pay:forcibly:retry'" v-if="record.status==='WAIT'">
+                  <a-popconfirm
+                    title="确定执行强制重试操作?"
+                    ok-text="确定"
+                    cancel-text="取消"
+                    @confirm="retry(record)"
+                  >
+                    <a style="color: #ff7e05">强制重试</a>
+                  </a-popconfirm>
+                </a-menu-item>
+                <a-menu-item v-has="'pay:forcibly:fail'" v-if="record.status==='WAIT' || record.status==='RETRY'">
+                  <a-popconfirm
+                    title="确定执行强制失败操作?"
+                    ok-text="确定"
+                    cancel-text="取消"
+                    @confirm="fail(record)"
+                  >
+                    <a style="color: red">强制失败</a>
+                  </a-popconfirm>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
+
           </template>
         </a-table>
       </div>
@@ -108,7 +144,7 @@
 </template>
 
 <script>
-import {list} from '@/api/platform/pay'
+import {forciblyFail, forciblyRetry, list} from '@/api/platform/pay'
 import {TablePageMixin} from '@/mixins'
 import Logs from './Logs'
 import {littleCamelToUnderline} from "@/utils/strUtil";
@@ -124,6 +160,7 @@ export default {
         {
           title: '交易号',
           dataIndex: 'tradeNo',
+          fixed: 'left'
         },
         {
           title: '所属项目',
@@ -220,6 +257,34 @@ export default {
     initDefaultSort() {
       this.sortField = littleCamelToUnderline('tradeNo')
       this.sortOrder = 'desc'
+    },
+    retry(record) {
+      this.loading = true
+      forciblyRetry(record).then(res => {
+        if (res.code === 200) {
+          this.$message.success("操作成功!")
+          this.reloadTable(false)
+        } else {
+          this.$message.warn(res.message || '操作失败')
+        }
+        this.loading = false
+      }).catch(e => {
+        this.loading = false
+      })
+    },
+    fail(record) {
+      this.loading = true
+      forciblyFail(record).then(res => {
+        if (res.code === 200) {
+          this.$message.success("操作成功!")
+          this.reloadTable(false)
+        } else {
+          this.$message.warn(res.message || '操作失败')
+        }
+        this.loading = false
+      }).catch(e => {
+        this.loading = false
+      })
     },
   }
 }
