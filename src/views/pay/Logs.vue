@@ -39,6 +39,11 @@ export default {
       visible: false,
       columns: [
         {
+          title: '通知Id',
+          dataIndex: 'notifyId',
+          width: 100
+        },
+        {
           title: '所属项目',
           dataIndex: 'projectId',
           width: 50
