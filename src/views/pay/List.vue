@@ -111,7 +111,7 @@
                 <a-menu-item v-has="'project:read'">
                   <a @click="$refs.log.show(record)">通知记录</a>
                 </a-menu-item>
-                <a-menu-item v-has="'pay:forcibly:retry'" v-if="record.status==='WAIT'">
+                <a-menu-item v-has="'pay:forcibly:retry'" v-if="record.status==='WAIT' && record.thirdPartTradeNo !== ''">
                   <a-popconfirm
                     title="确定执行强制重试操作?"
                     ok-text="确定"
