@@ -102,7 +102,7 @@
             <dict-slot dict-code="notify_status" :value="text"/>
           </template>
           <template #action-slot="text, record">
-            <a-dropdown placement="bottomCenter">
+            <a-dropdown placement="bottomCenter" class="not-select">
               <a class="ant-dropdown-link" @click="e => e.preventDefault()">
                 展开
                 <a-icon type="down"/>
@@ -263,10 +263,10 @@ export default {
       forciblyRetry(record).then(res => {
         if (res.code === 200) {
           this.$message.success("操作成功!")
-          this.reloadTable(false)
         } else {
           this.$message.warn(res.message || '操作失败')
         }
+        this.reloadTable(false)
         this.loading = false
       }).catch(e => {
         this.loading = false
@@ -277,10 +277,10 @@ export default {
       forciblyFail(record).then(res => {
         if (res.code === 200) {
           this.$message.success("操作成功!")
-          this.reloadTable(false)
         } else {
           this.$message.warn(res.message || '操作失败')
         }
+        this.reloadTable(false)
         this.loading = false
       }).catch(e => {
         this.loading = false
@@ -297,4 +297,14 @@ export default {
 .ant-tag.single-tag {
   margin-right: 0
 }
+
+.not-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 </style>
