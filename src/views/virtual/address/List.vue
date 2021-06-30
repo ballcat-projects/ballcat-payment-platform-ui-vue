@@ -151,7 +151,7 @@ export default {
         disabled: record.disabled ? '0' : '1'
       }).then(res => {
         if (res.code === 200) {
-          this.reloadTable()
+          this.reloadTable(false)
         }
       })
     }
