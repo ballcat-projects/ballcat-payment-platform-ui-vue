@@ -19,6 +19,16 @@
               <dict-select dict-code="tf" placeholder="是否禁用" v-model="queryParam.disabled"/>
             </a-form-item>
           </a-col>
+          <a-col :xl="6" :md="12" :sm="24">
+            <a-form-item label="模式">
+              <dict-select dict-code="virtual_address_mode" placeholder="选择模式" v-model="queryParam.mode"/>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :md="12" :sm="24">
+            <a-form-item label="选中项目id">
+              <a-input-number v-model="queryParam.projectIds" placeholder="请输入" style="width: 100%"/>
+            </a-form-item>
+          </a-col>
 
           <!-- <template v-if="advanced">
            </template>-->
@@ -68,6 +78,9 @@
           :loading="loading"
           @change="handleTableChange"
         >
+          <template #mode-slot="text">
+            <dict-slot dict-code="virtual_address_mode" :value="text"/>
+          </template>
           <template #chain-slot="text">
             <dict-slot dict-code="chain" :value="text"/>
           </template>
@@ -111,6 +124,19 @@ export default {
           title: '地址',
           dataIndex: 'address',
           ellipsis: true
+        },
+        {
+          title: '模式',
+          dataIndex: 'mode',
+          width: 200,
+          scopedSlots: {customRender: 'mode-slot'}
+        },
+        {
+          title: '选中项目',
+          dataIndex: 'projectIds',
+          customRender: (text) => {
+            return text.join(",")
+          }
         },
         {
           title: '禁用',

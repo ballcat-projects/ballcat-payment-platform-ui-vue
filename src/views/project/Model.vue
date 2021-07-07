@@ -35,15 +35,15 @@
           <div slot="message" style="font-size: 13px;">
             使用该模式的项目可以拉取满足以下条件的地址
           </div>
-          <divs slot="description" style="font-size: 9px">
-          <span v-if="form.getFieldValue('mode')==='ALLOW'">
-            <p>1. 如果地址模式为 <a-tag>排除</a-tag> 且 配置的项目中不包含本项目</p>
-            <p>2. 如果地址模式为 <a-tag>包括</a-tag> 且 配置的项目中包含本项目</p>
+          <div slot="description" style="font-size: 9px">
+          <span v-if="form.getFieldValue('mode')!=='INCLUDE'">
+            <p>1. 如果地址模式为 <a-tag>禁止所选项目使用</a-tag> 且 配置的项目中不包含本项目</p>
+            <p>2. 如果地址模式为 <a-tag>仅允许所选项目使用</a-tag> 且 配置的项目中包含本项目</p>
           </span>
             <span v-else>
-            <p>1. 地址模式为 <a-tag>包括</a-tag> 且 配置的项目中包含本项目</p>
+            <p>1. 地址模式为 <a-tag>仅允许所选项目使用</a-tag> 且 配置的项目中包含本项目</p>
           </span>
-          </divs>
+          </div>
         </a-alert>
       </a-form-item>
 
