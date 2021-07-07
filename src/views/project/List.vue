@@ -58,6 +58,10 @@
 
       <!--数据表格区域-->
       <div class="ant-pro-table-wrapper">
+        <a-button type="primary" :disabled="selectedRowKeys.length<1" @click="visible=true;loading=false;newMode=null">
+          设置模式
+        </a-button>
+
         <a-table
           ref="table"
           size="middle"
@@ -67,9 +71,13 @@
           :pagination="pagination"
           :loading="loading"
           @change="handleTableChange"
+          :row-selection="{onChange: onSelectChange, selectedRowKeys: selectedRowKeys}"
         >
           <template #disabled-slot="text">
             <dict-slot dict-code="tf" :value="text"/>
+          </template>
+          <template #mode-slot="text">
+            <dict-slot dict-code="project_mode" :value="text"/>
           </template>
           <template #action-slot="text, record">
             <a v-has="'project:edit'" @click="reset(record)">重置API</a>
@@ -86,18 +94,54 @@
     <model ref="formModal" @reload-page-table="reloadTable"/>
 
     <history ref="history"/>
+
+    <a-modal
+      :visible="visible"
+      :confirm-loading="loading"
+      title="选择新模式"
+      @ok="setMode"
+      @cancel="visible=false;loading=false"
+    >
+      <a-input-group compact>
+        <a-input
+          addon-before="模式"
+          style="width: 50px"
+        />
+        <dict-select style="width: calc(100% - 50px);margin-bottom: 5px" :allow-clear="false" dict-code="project_mode"
+                     v-model="newMode"/>
+      </a-input-group>
+      <a-alert v-if="newMode===null" type="warning">
+        <div slot="message">
+          请选择新模式
+        </div>
+      </a-alert>
+      <a-alert v-else type="success">
+        <div slot="message" style="font-size: 13px;">
+          使用该模式的项目可以拉取满足以下条件的地址
+        </div>
+        <divs slot="description" style="font-size: 9px">
+          <span v-if="newMode==='ALLOW'">
+            <p>1. 如果地址模式为 <a-tag>排除</a-tag> 且 配置的项目中不包含本项目</p>
+            <p>2. 如果地址模式为 <a-tag>包括</a-tag> 且 配置的项目中包含本项目</p>
+          </span>
+          <span v-else>
+            <p>1. 地址模式为 <a-tag>包括</a-tag> 且 配置的项目中包含本项目</p>
+          </span>
+        </divs>
+      </a-alert>
+    </a-modal>
   </div>
 </template>
 
 <script>
-import {disabled, list, resetApi} from '@/api/platform/project'
+import {disabled, list, mode, resetApi} from '@/api/platform/project'
 import {TablePageMixin} from '@/mixins'
 import Model from './Model'
 import History from './History'
 
 export default {
   name: 'List',
-  components: {Model,History},
+  components: {Model, History},
   mixins: [TablePageMixin],
   data() {
     return {
@@ -117,6 +161,12 @@ export default {
           dataIndex: 'disabled',
           width: 50,
           scopedSlots: {customRender: 'disabled-slot'}
+        },
+        {
+          title: '模式',
+          dataIndex: 'mode',
+          width: 200,
+          scopedSlots: {customRender: 'mode-slot'}
         },
         {
           title: 'API KEY',
@@ -141,6 +191,9 @@ export default {
           scopedSlots: {customRender: 'action-slot'}
         }
       ],
+      visible: false,
+      customerData: null,
+      newMode: null,
     }
   },
   created() {
@@ -165,6 +218,23 @@ export default {
           this.reloadTable()
         }
       })
+    },
+    setMode() {
+      if (this.newMode === null) {
+        this.$message.warn("请选择新的模式!")
+        return
+      }
+      this.loading = true;
+      mode({ids: this.selectedRowKeys, mode: this.newMode}).then(res => {
+        if (res.code === 200) {
+          this.$message.success("操作成功!")
+        }
+      }).finally(() => {
+        this.loading = false
+        this.visible = false
+        this.reloadTable(false)
+      })
+
     }
   }
 }

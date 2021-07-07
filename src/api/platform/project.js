@@ -31,6 +31,14 @@ export function disabled(obj) {
   })
 }
 
+export function mode(obj) {
+  return request({
+    url: `/project/set/mode`,
+    method: 'patch',
+    data: obj
+  })
+}
+
 export function history(query) {
   return request({
     url: '/project/history/' + query.projectId,
