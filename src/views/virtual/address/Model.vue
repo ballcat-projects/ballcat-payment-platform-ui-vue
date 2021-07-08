@@ -46,7 +46,7 @@
           <a-input-group compact>
             <a-input style="width: 80px">
               <div slot="addonBefore">
-                选中项目
+                选择项目
               </div>
             </a-input>
 
@@ -91,7 +91,7 @@
         </a-col>
       </a-row>
 
-      <div style="margin-bottom: 10px;margin-top: -5px">
+      <div v-if="!res" style="margin-bottom: 10px;margin-top: -5px">
         <a-button type="primary" style="width: 100px; margin-right: 10px;"
                   @click="createVa">
           <a-icon type="plus"/>
@@ -204,14 +204,12 @@ export default {
 
       addObj({...dto, list: this.vaList}).then(res => {
         if (res.code === 200) {
-          this.dto = [...res.data]
-          this.vaList = [].concat(this.dto.list)
+          this.dto = {...res.data}
+          this.vaList = [...res.data.list]
           this.res = true
           this.$emit('reload-page-table', false)
         }
-
-        this.loading = false
-      }).catch(res => {
+      }).finally(() => {
         this.loading = false
       })
     },

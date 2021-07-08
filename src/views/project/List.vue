@@ -63,7 +63,7 @@
 
       <!--数据表格区域-->
       <div class="ant-pro-table-wrapper">
-        <a-button type="primary" :disabled="selectedRowKeys.length<1" @click="visible=true;loading=false;newMode=null">
+        <a-button v-has="'project:edit'" type="primary" :disabled="selectedRowKeys.length<1" @click="visible=true;loading=false;newMode=null">
           设置模式
         </a-button>
 
@@ -197,7 +197,6 @@ export default {
         }
       ],
       visible: false,
-      customerData: null,
       newMode: null,
     }
   },

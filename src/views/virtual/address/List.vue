@@ -66,6 +66,26 @@
         </div>
       </div>
 
+      <a-button style="margin-right: 5px" type="default" :disabled="selectedRowKeys.length<1"
+                @click="visible=true;loading=false;newMode=null">
+        设置模式
+      </a-button>
+
+      <a-button style="margin-right: 5px" type="dashed" :disabled="selectedRowKeys.length<1"
+                @click="openProjectModal(selectedRowKeys, [])">
+        更新选中项目
+      </a-button>
+
+      <a-button style="margin-right: 5px" type="primary" :disabled="selectedRowKeys.length<1"
+                @click="disabledHandler(selectedRowKeys, 0)">
+        启用
+      </a-button>
+
+      <a-button style="margin-right: 5px" type="danger" :disabled="selectedRowKeys.length<1"
+                @click="disabledHandler(selectedRowKeys, 1)">
+        禁用
+      </a-button>
+
       <!--数据表格区域-->
       <div class="ant-pro-table-wrapper">
         <a-table
@@ -76,6 +96,7 @@
           :data-source="dataSource"
           :pagination="pagination"
           :loading="loading"
+          :row-selection="{onChange: onSelectChange, selectedRowKeys: selectedRowKeys}"
           @change="handleTableChange"
         >
           <template #mode-slot="text">
@@ -91,7 +112,14 @@
             <dict-slot dict-code="tf" :value="text"/>
           </template>
           <template #action-slot="text, record">
-            <a v-has="'virtual:address:edit'" @click="disabledHandler(record)">{{ record.disabled ? '启用' : '禁用' }}</a>
+            <a v-has="'virtual:address:edit'"
+               @click="disabledHandler([record.id], !record.disabled)">{{ record.disabled ? '启用' : '禁用' }}</a>
+
+            <a-divider type="vertical" v-has="'virtual:address:edit'"/>
+            <a v-has="'virtual:address:edit'" style="margin-right: 5px" type="dashed"
+               @click="openProjectModal([record.id], record.projectIds)">
+              更新选中项目
+            </a>
           </template>
         </a-table>
       </div>
@@ -99,11 +127,66 @@
 
     <!--表单弹窗-->
     <model ref="formModal" @reload-page-table="reloadTable"/>
+
+    <a-modal
+      :visible="visible"
+      :confirm-loading="loading"
+      title="选择新模式"
+      @ok="setMode"
+      @cancel="visible=false;loading=false"
+    >
+      <a-input-group compact>
+        <a-input
+          addon-before="模式"
+          style="width: 50px"
+        />
+        <dict-select style="width: calc(100% - 50px);margin-bottom: 5px" :allow-clear="false"
+                     dict-code="virtual_address_mode"
+                     v-model="newMode"/>
+      </a-input-group>
+      <a-alert v-if="newMode===null" type="warning">
+        <div slot="message">
+          请选择新模式
+        </div>
+      </a-alert>
+      <a-alert v-else type="success">
+        <div slot="message" style="font-size: 13px;">
+          使用该模式的地址可以被满足以下条件的项目获取
+        </div>
+        <div slot="description" style="font-size: 9px">
+          <span v-if="newMode!=='INCLUDE'">
+            <p>1. 项目未被选中</p>
+          </span>
+          <span v-else>
+            <p>1. 项目被选中</p>
+          </span>
+        </div>
+      </a-alert>
+    </a-modal>
+
+    <a-modal
+      :visible="projectVisible"
+      :confirm-loading="loading"
+      title="选择项目"
+      @ok="setProject"
+      @cancel="projectVisible=false;loading=false"
+    >
+      <a-input-group compact>
+        <a-input style="width: 80px">
+          <div slot="addonBefore">
+            选择项目
+          </div>
+        </a-input>
+
+        <lov ref="projectLov" keyword="projects" v-model="newProject" placeholder="请选择项目"
+             style="width: calc(100% - 80px);margin-top: 0"/>
+      </a-input-group>
+    </a-modal>
   </div>
 </template>
 
 <script>
-import {disabled, list} from '@/api/platform/virtualAddress'
+import {disabled, list, mode, project} from '@/api/platform/virtualAddress'
 import {TablePageMixin} from '@/mixins'
 import Model from './Model'
 
@@ -163,6 +246,11 @@ export default {
           scopedSlots: {customRender: 'action-slot'}
         }
       ],
+      visible: false,
+      newMode: null,
+      projectVisible: false,
+      newProject: [],
+      projectUpdateId: []
     }
   },
   created() {
@@ -171,14 +259,51 @@ export default {
     handleAdd(record) {
       this.$refs.formModal.add({title: '批量新增地址'})
     },
-    disabledHandler(record) {
+    disabledHandler(ids, isDis) {
       disabled({
-        id: record.id,
-        disabled: record.disabled ? '0' : '1'
+        ids: [...ids],
+        disabled: isDis ? '1' : '0'
       }).then(res => {
         if (res.code === 200) {
+          this.$message.success("操作成功!")
           this.reloadTable(false)
         }
+      })
+    },
+    setMode() {
+      this.loading = true
+      mode({ids: [...this.selectedRowKeys], mode: this.newMode}).then(res => {
+        if (res.code === 200) {
+          this.$message.success("操作成功!")
+          this.reloadTable(false)
+          this.visible = false
+        }
+      }).finally(() => {
+        this.loading = false
+      })
+    },
+    openProjectModal(updateIds, oldProjectIds) {
+      this.projectVisible = true;
+      this.loading = false;
+      this.newProject = [];
+      this.projectUpdateId = [...updateIds];
+      this.newProject = [...oldProjectIds];
+      setTimeout(()=>{
+        this.$refs.projectLov.reloadTable();
+      })
+    },
+    setProject() {
+      this.loading = true
+      project({ids: [...this.projectUpdateId], projectIds: this.newProject}).then(res => {
+        if (res.code === 200) {
+          this.$message.success("操作成功!")
+          this.reloadTable(false)
+          this.projectVisible = false
+        }else {
+          this.$message.success("操作失败!")
+        }
+      }).finally(() => {
+        this.loading = false
       })
     }
   }

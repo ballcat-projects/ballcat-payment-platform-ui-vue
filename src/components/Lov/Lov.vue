@@ -133,7 +133,7 @@
             </a-col>
           </a-row>
         </a-form>
-      </div> 
+      </div>
       <div v-if="showSelectAll" style="padding:0 20px;">
         <a-form>
           <a-form-item read-only style="margin-top:10px;">
@@ -173,12 +173,12 @@
         :custom-row="customRow"
         @change="handleTableChange"
       />
-    
+
       <!-- </a-spin> -->
       <div class="ballcat-model-bottom">
         <a-pagination
           v-model="pagination.current"
-          :total="pagination.total" 
+          :total="pagination.total"
           :page-size="pagination.pageSize"
           :show-total="pagination.showTotal"
           show-size-changer
@@ -390,7 +390,7 @@ export default {
       }else{
            this.reloadTable()
            this.visible=true;
-      } 
+      }
     },
     load() {
       this.loading = true

@@ -20,7 +20,26 @@ export function addObj(obj) {
 
 export function disabled(obj) {
   return request({
-    url: `/virtual/address/disabled/${obj.id}/${obj.disabled}`,
+    url: `/virtual/address/disabled`,
     method: 'patch',
+    data: obj
+  })
+}
+
+
+export function mode(obj) {
+  return request({
+    url: `/virtual/address/mode/`,
+    method: 'patch',
+    data: obj
+  })
+}
+
+
+export function project(obj) {
+  return request({
+    url: `/virtual/address/project/`,
+    method: 'patch',
+    data: obj
   })
 }
