@@ -47,6 +47,16 @@
         </a-alert>
       </a-form-item>
 
+      <a-form-item label="项目标志">
+        <a-input v-decorator="['mark', decoratorOptions.mark]" placeholder="请输入项目标志"/>
+        <a-alert type="info">
+          <div slot="description" style="font-size: 9px">
+            部分支付接口会要求传入 <a-tag>商品信息</a-tag> 实际展示给用户的商品信息为 <a-tag>您输入的项目标志 您传入的商品信息</a-tag>
+            <br/>
+            <span style="font-size: 7px;color: #52c41a">项目标志和商品信息中间会使用空格进行间隔</span>
+          </div>
+        </a-alert>
+      </a-form-item>
     </a-form>
   </a-modal>
 </template>
@@ -67,7 +77,10 @@ export default {
         },
         mode: {
           initialValue: 'ALLOW'
-        }
+        },
+        mark: {
+          rules: [{required: true, message: '请输入项目标志!'}]
+        },
       },
       reqFunctions: {
         create: addObj,

@@ -63,7 +63,8 @@
 
       <!--数据表格区域-->
       <div class="ant-pro-table-wrapper">
-        <a-button v-has="'project:edit'" type="primary" :disabled="selectedRowKeys.length<1" @click="visible=true;loading=false;newMode=null">
+        <a-button v-has="'project:edit'" type="primary" :disabled="selectedRowKeys.length<1"
+                  @click="visible=true;loading=false;newMode=null">
           设置模式
         </a-button>
 
@@ -181,6 +182,11 @@ export default {
         {
           title: 'API SECURITY',
           dataIndex: 'apiSecurity',
+          ellipsis: true
+        },
+        {
+          title: '项目标志',
+          dataIndex: 'mark',
           ellipsis: true
         },
         {
