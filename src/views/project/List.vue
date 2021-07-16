@@ -49,7 +49,17 @@
     <a-card :bordered="false" :body-style="{paddingTop: '0'}">
       <!-- 操作按钮区域 -->
       <div class="ant-pro-table-toolbar">
-        <div class="ant-pro-table-toolbar-title">项目</div>
+        <div class="ant-pro-table-toolbar-title">
+          项目
+          <a-button style="margin-left: 5px;" v-has="'project:edit'" type="primary" :disabled="selectedRowKeys.length<1"
+                    @click="visible=true;loading=false;newMode=null">
+            设置模式
+          </a-button>
+          <a-button style="margin-left: 5px;" v-has="'project:edit'" type="primary" :disabled="selectedRowKeys.length<1"
+                    @click="visible=true;loading=false;newScope=[];setScopeIds=[...selectedRowKeys]">
+            更新权限
+          </a-button>
+        </div>
         <div class="ant-pro-table-toolbar-option">
           <a-button
             v-has="'project:add'"
@@ -63,11 +73,6 @@
 
       <!--数据表格区域-->
       <div class="ant-pro-table-wrapper">
-        <a-button v-has="'project:edit'" type="primary" :disabled="selectedRowKeys.length<1"
-                  @click="visible=true;loading=false;newMode=null">
-          设置模式
-        </a-button>
-
         <a-table
           ref="table"
           size="middle"
@@ -76,6 +81,7 @@
           :data-source="dataSource"
           :pagination="pagination"
           :loading="loading"
+          :scroll="{x:true}"
           @change="handleTableChange"
           :row-selection="{onChange: onSelectChange, selectedRowKeys: selectedRowKeys}"
         >
@@ -85,12 +91,30 @@
           <template #mode-slot="text">
             <dict-slot dict-code="project_mode" :value="text"/>
           </template>
+          <template #scope-slot="text">
+            <dict-slot style="margin-right: 5px" v-for="item of text" dict-code="project_scope" :value="item"/>
+          </template>
           <template #action-slot="text, record">
-            <a v-has="'project:edit'" @click="reset(record)">重置API</a>
-            <a-divider type="vertical" v-has="'project:edit'"/>
-            <a v-has="'project:edit'" @click="disabledHandler(record)">{{ record.disabled ? '启用' : '禁用' }}</a>
-            <a-divider type="vertical" v-has="'project:read'"/>
-            <a v-has="'project:read'" @click="$refs.history.show(record)">历史记录</a>
+            <a-dropdown>
+              <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+                操作
+                <a-icon type="down"/>
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item v-has="'project:edit'">
+                  <a @click="reset(record)">重置API</a>
+                </a-menu-item>
+                <a-menu-item v-has="'project:edit'">
+                  <a @click="disabledHandler(record)">{{ record.disabled ? '启用' : '禁用' }}</a>
+                </a-menu-item>
+                <a-menu-item v-has="'project:edit'">
+                  <a @click="setScopeIds=[record.id];newScope=[...record.scope];scopeVisible=true;">更新权限</a>
+                </a-menu-item>
+                <a-menu-item v-has="'project:read'">
+                  <a @click="$refs.history.show(record)">修改记录</a>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
           </template>
         </a-table>
       </div>
@@ -136,11 +160,21 @@
         </div>
       </a-alert>
     </a-modal>
+
+    <a-modal
+      :visible="scopeVisible"
+      :confirm-loading="loading"
+      title="更新权限"
+      @ok="setScope"
+      @cancel="scopeVisible=false;loading=false;newScope=[];setScopeIds=[]"
+    >
+      <dict-select mode="multiple" dict-code="project_scope" v-model="newScope"/>
+    </a-modal>
   </div>
 </template>
 
 <script>
-import {disabled, list, mode, resetApi} from '@/api/platform/project'
+import {disabled, list, mode, resetApi, scope} from '@/api/platform/project'
 import {TablePageMixin} from '@/mixins'
 import Model from './Model'
 import History from './History'
@@ -156,23 +190,28 @@ export default {
         {
           title: 'ID',
           dataIndex: 'id',
+          fixed: 'left',
           width: 80
         },
         {
           title: '项目名称',
           dataIndex: 'name',
+          fixed: 'left',
         },
         {
           title: '禁用',
           dataIndex: 'disabled',
-          width: 50,
           scopedSlots: {customRender: 'disabled-slot'}
         },
         {
           title: '模式',
           dataIndex: 'mode',
-          width: 200,
           scopedSlots: {customRender: 'mode-slot'}
+        },
+        {
+          title: '权限',
+          dataIndex: 'scope',
+          scopedSlots: {customRender: 'scope-slot'}
         },
         {
           title: 'API KEY',
@@ -197,13 +236,15 @@ export default {
         {
           title: '操作',
           align: 'center',
-          width: 250,
           fixed: 'right',
           scopedSlots: {customRender: 'action-slot'}
         }
       ],
       visible: false,
       newMode: null,
+      scopeVisible: false,
+      newScope: [],
+      setScopeIds: [],
     }
   },
   created() {
@@ -244,7 +285,24 @@ export default {
         this.visible = false
         this.reloadTable(false)
       })
+    },
+    setScope() {
+      if (this.setScopeIds.length < 1) {
+        this.$message.warn("至少选择一个项目!")
+        return
+      }
 
+      this.loading = true
+      scope({ids: this.setScopeIds, scopes: [...this.newScope]}).then(res => {
+        if (res.code === 200) {
+          this.$message.success('操作成功')
+        }
+      }).finally(() => {
+        this.loading = false
+        this.scopeVisible = false
+        this.newScope = []
+        this.reloadTable(false)
+      })
     }
   }
 }

@@ -39,6 +39,14 @@ export function mode(obj) {
   })
 }
 
+export function scope(obj) {
+  return request({
+    url: `/project/set/scope`,
+    method: 'patch',
+    data: obj
+  })
+}
+
 export function history(query) {
   return request({
     url: '/project/history/' + query.projectId,

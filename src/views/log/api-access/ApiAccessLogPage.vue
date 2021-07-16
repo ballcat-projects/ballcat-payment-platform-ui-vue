@@ -54,7 +54,7 @@
     <a-card :bordered="false" :body-style="{paddingTop: 0, paddingBottom: 0}">
       <!-- 操作按钮区域 -->
       <div class="ant-pro-table-toolbar">
-        <div class="ant-pro-table-toolbar-title">访问日志</div>
+        <div class="ant-pro-table-toolbar-title">API请求日志</div>
       </div>
       <div class="ant-pro-table-wrapper">
         <!--数据表格-->

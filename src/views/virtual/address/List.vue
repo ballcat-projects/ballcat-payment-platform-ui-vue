@@ -54,7 +54,28 @@
     <a-card :bordered="false" :body-style="{paddingTop: '0'}">
       <!-- 操作按钮区域 -->
       <div class="ant-pro-table-toolbar">
-        <div class="ant-pro-table-toolbar-title">项目</div>
+        <div class="ant-pro-table-toolbar-title">
+          虚拟地址
+          <a-button style="margin-left: 5px;margin-right: 5px" type="default" :disabled="selectedRowKeys.length<1"
+                    @click="visible=true;loading=false;newMode=null">
+            设置模式
+          </a-button>
+
+          <a-button style="margin-right: 5px" type="dashed" :disabled="selectedRowKeys.length<1"
+                    @click="openProjectModal(selectedRowKeys, [])">
+            更新选中项目
+          </a-button>
+
+          <a-button style="margin-right: 5px" type="primary" :disabled="selectedRowKeys.length<1"
+                    @click="disabledHandler(selectedRowKeys, 0)">
+            启用
+          </a-button>
+
+          <a-button style="margin-right: 5px" type="danger" :disabled="selectedRowKeys.length<1"
+                    @click="disabledHandler(selectedRowKeys, 1)">
+            禁用
+          </a-button>
+        </div>
         <div class="ant-pro-table-toolbar-option">
           <a-button
             v-has="'virtual:address:add'"
@@ -65,26 +86,6 @@
           </a-button>
         </div>
       </div>
-
-      <a-button style="margin-right: 5px" type="default" :disabled="selectedRowKeys.length<1"
-                @click="visible=true;loading=false;newMode=null">
-        设置模式
-      </a-button>
-
-      <a-button style="margin-right: 5px" type="dashed" :disabled="selectedRowKeys.length<1"
-                @click="openProjectModal(selectedRowKeys, [])">
-        更新选中项目
-      </a-button>
-
-      <a-button style="margin-right: 5px" type="primary" :disabled="selectedRowKeys.length<1"
-                @click="disabledHandler(selectedRowKeys, 0)">
-        启用
-      </a-button>
-
-      <a-button style="margin-right: 5px" type="danger" :disabled="selectedRowKeys.length<1"
-                @click="disabledHandler(selectedRowKeys, 1)">
-        禁用
-      </a-button>
 
       <!--数据表格区域-->
       <div class="ant-pro-table-wrapper">
