@@ -56,7 +56,7 @@
             设置模式
           </a-button>
           <a-button style="margin-left: 5px;" v-has="'project:edit'" type="primary" :disabled="selectedRowKeys.length<1"
-                    @click="visible=true;loading=false;newScope=[];setScopeIds=[...selectedRowKeys]">
+                    @click="scopeVisible=true;loading=false;newScope=[];setScopeIds=[...selectedRowKeys]">
             更新权限
           </a-button>
         </div>
