@@ -134,7 +134,7 @@
             <a-divider type="vertical" v-has="'virtual:address:edit'"/>
             <a v-has="'virtual:address:edit'" style="margin-right: 5px" type="dashed"
                @click="updateBalance([record.id])">
-              更新地址
+              更新余额
             </a>
           </template>
         </a-table>
@@ -314,18 +314,29 @@ export default {
       })
     },
     updateBalance(updateIds){
+      this.loading = true
       if (updateIds) {
         updateSelectBalance({ids:[...updateIds]}).then(res => {
           if (res.code === 200) {
-            this.reloadTable()
-          }
-        })
+            this.$message.success("操作成功!")
+            this.reloadTable(false)
+          }else {
+          this.$message.success("操作失败!")
+        }
+        }).finally(() => {
+        this.loading = false
+      })
       }else{
         updateAllBalance().then(res => {
+          this.$message.success("操作成功!")
           if (res.code === 200) {
-            this.reloadTable()
-          }
-        })
+            this.reloadTable(false)
+          }else {
+          this.$message.success("操作失败!")
+        }
+        }).finally(() => {
+        this.loading = false
+      })
       }
     },
     setProject() {
