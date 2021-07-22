@@ -43,3 +43,18 @@ export function project(obj) {
     data: obj
   })
 }
+
+export function updateAllBalance() {
+  return request({
+    url:`virtual/address/balance/all`,
+    method:'patch'
+  })
+}
+
+export function updateSelectBalance(obj) {
+  return request({
+    url:`virtual/address/balance`,
+    method:'patch',
+    data:obj
+  })
+}

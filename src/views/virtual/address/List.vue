@@ -62,6 +62,16 @@
           </a-button>
 
           <a-button style="margin-right: 5px" type="dashed" :disabled="selectedRowKeys.length<1"
+                    @click="updateBalance(selectedRowKeys)">
+            更新选中地址余额
+          </a-button>
+
+          <a-button style="margin-right: 5px" type="dashed" 
+                    @click="updateBalance()">
+            更新所有地址余额
+          </a-button>
+
+          <a-button style="margin-right: 5px" type="dashed" :disabled="selectedRowKeys.length<1"
                     @click="openProjectModal(selectedRowKeys, [])">
             更新选中项目
           </a-button>
@@ -120,6 +130,11 @@
             <a v-has="'virtual:address:edit'" style="margin-right: 5px" type="dashed"
                @click="openProjectModal([record.id], record.projectIds)">
               更新选中项目
+            </a>
+            <a-divider type="vertical" v-has="'virtual:address:edit'"/>
+            <a v-has="'virtual:address:edit'" style="margin-right: 5px" type="dashed"
+               @click="updateBalance([record.id])">
+              更新地址
             </a>
           </template>
         </a-table>
@@ -187,7 +202,7 @@
 </template>
 
 <script>
-import {disabled, list, mode, project} from '@/api/platform/virtualAddress'
+import {disabled, list, mode, project,updateAllBalance,updateSelectBalance} from '@/api/platform/virtualAddress'
 import {TablePageMixin} from '@/mixins'
 import Model from './Model'
 
@@ -207,6 +222,11 @@ export default {
         {
           title: '地址',
           dataIndex: 'address',
+          ellipsis: true
+        },
+        {
+          title: '地址余额',
+          dataIndex: 'usdtAmount',
           ellipsis: true
         },
         {
@@ -292,6 +312,21 @@ export default {
       setTimeout(()=>{
         this.$refs.projectLov.reloadTable();
       })
+    },
+    updateBalance(updateIds){
+      if (updateIds) {
+        updateSelectBalance({ids:[...updateIds]}).then(res => {
+          if (res.code === 200) {
+            this.reloadTable()
+          }
+        })
+      }else{
+        updateAllBalance().then(res => {
+          if (res.code === 200) {
+            this.reloadTable()
+          }
+        })
+      }
     },
     setProject() {
       this.loading = true
